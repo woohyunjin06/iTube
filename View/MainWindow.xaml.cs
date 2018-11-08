@@ -42,5 +42,15 @@ namespace iTube
         {
             this.Close();
         }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            mainControl.BackPressed();
+        }
+
+        private void MainControl_backVisibility(Visibility visibility)
+        {
+            Back.Visibility = visibility;
+        }
     }
 }

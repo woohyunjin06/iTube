@@ -11,13 +11,18 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid Height="45" VerticalAlignment="Top" Background="Red" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
-            <TextBlock Margin="25 0 0 0" Text="Home" Foreground="White"  VerticalAlignment="Center" FontSize="18" FontFamily="Champagne &amp; Limousines" />
+            <StackPanel Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0" >
+                <Button x:Name="Back" Background="{x:Null}" BorderBrush="{x:Null}" Visibility="Collapsed" Click="Back_Click" Margin="-10 0 0 0">
+                    <materialDesign:PackIcon Kind="ArrowBack"/>
+                </Button>
+                <TextBlock Margin="0 2 0 0" Text="Home" Foreground="White" FontSize="18" />
+            </StackPanel>
             <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Click="Button_Click">
                 <materialDesign:PackIcon Kind="Close"/>
             </Button>
         </Grid>
         <Grid Margin="0 45 0 0">
-            <control:MainControl/>
+            <control:MainControl x:Name="mainControl" backVisibility="MainControl_backVisibility"/>
         </Grid>
     </Grid>
 </Window>

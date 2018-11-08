@@ -29,6 +29,8 @@ C:\Users\현진\source\repos\iTube\iTube\obj\Debug\iTube.csproj.CoreCompileInput
 C:\Users\현진\source\repos\iTube\iTube\obj\Debug\iTube.csproj.CopyComplete
 C:\Users\현진\source\repos\iTube\iTube\obj\Debug\iTube.exe
 C:\Users\현진\source\repos\iTube\iTube\obj\Debug\iTube.pdb
+C:\Users\현진\source\repos\iTube\iTube\obj\Debug\Control\PlayControl.g.cs
+C:\Users\현진\source\repos\iTube\iTube\obj\Debug\Control\PlayControl.baml
+C:\Users\현진\source\repos\iTube\iTube\obj\Debug\Control\VideoControl.g.cs
+C:\Users\현진\source\repos\iTube\iTube\obj\Debug\Control\VideoControl.baml
 C:\Users\현진\source\repos\iTube\iTube\obj\Debug\iTube.csprojAssemblyReference.cache
-C:\Users\현진\source\repos\iTube\iTube\obj\Debug\Control\PlayerControl.g.cs
-C:\Users\현진\source\repos\iTube\iTube\obj\Debug\Control\PlayerControl.baml

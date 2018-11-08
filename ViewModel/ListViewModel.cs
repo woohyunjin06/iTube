@@ -20,7 +20,7 @@ namespace iTube.ViewModel
         public ListViewModel()
         {
             VideoList = new ObservableCollection<Video>();
-            dbHelper = new DBHelper("itube", "itube",App.SERVER_URI, "itube");
+            dbHelper = new DBHelper("itube", "itube",App.SHORT_SERVER_URI, "itube");
             GetVideo();
         }
 
@@ -30,33 +30,24 @@ namespace iTube.ViewModel
             dbHelper.OpenConnection();
 
             MySqlDataReader result = dbHelper.ExecuteReaderQuery(
-                "SELECT user.nick, user.idx, user.profile, video.idx, video.title, video.thumbnail, video.views, video.date FROM video,user WHERE video.uploader = user.idx;"
+                "SELECT " +
+                "idx, title, uploader, thumbnail, video, views, date FROM video;" 
                 );
             while (result.Read())
             {
                 Video video = new Video()
                 {
-                    ChannelName = result[0].ToString(),
-                    ChannelIndex = Convert.ToInt32(result[1].ToString()),
-                    ChannelArt = new BitmapImage(),
-                    Index = Convert.ToInt32(result[3].ToString()),
-                    Title = result[4].ToString(),
-                    Thumbnail = new BitmapImage(new Uri(result[5].ToString())),
-                    Views = Convert.ToInt32(result[6]),
-                    Date = (DateTime)result[7]
+                    ChannelProfile = Utils.GetProfileByIdx(Convert.ToInt32(result[2].ToString())),
+
+                    Index = Convert.ToInt32(result[0].ToString()),
+                    Title = result[1].ToString(),
+                    Thumbnail = new BitmapImage(new Uri(result[3].ToString())),
+                    VideoLink = result[4].ToString(),
+                    Views = Convert.ToInt32(result[5]),
+                    Date = (DateTime)result[6]
                 };
 
-                video.ChannelArt.BeginInit();
-                if (result[2].ToString().Trim().Length == 0)
-                {
-                    video.ChannelArt.UriSource = new Uri("pack://application:,,,/iTube;component/Resource/ic_person.png", UriKind.Absolute);
-                }
-
-                else
-                {
-                    video.ChannelArt.UriSource = new Uri("http://" + App.SERVER_URI + "/video/" + result[2].ToString());
-                }
-                video.ChannelArt.EndInit();
+                
 
                 VideoList.Add(video);
             }

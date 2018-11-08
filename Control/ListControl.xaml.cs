@@ -1,6 +1,7 @@
 ﻿using iTube.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,9 @@ namespace iTube.Control
     /// </summary>
     public partial class ListControl : UserControl
     {
+        public delegate void VideoController(Video video);
+        public event VideoController PlayVideo;
+
         public ListControl()
         {
             InitializeComponent();
@@ -34,10 +38,13 @@ namespace iTube.Control
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Video menuData = (Video)ListView.SelectedItem;
-            ListView.SelectedItem = null;
+            if (ListView.SelectedItem != null)
+            {
+                Video videoData = (Video)ListView.SelectedItem;
+                ListView.SelectedItem = null;
 
-
+                PlayVideo(videoData);
+            }
         }
     }
 }

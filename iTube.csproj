@@ -95,7 +95,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Control\PlayerControl.xaml">
+    <Page Include="Control\PlayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\VideoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,12 +120,20 @@
     <Compile Include="Control\MainControl.xaml.cs">
       <DependentUpon>MainControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Control\PlayerControl.xaml.cs">
-      <DependentUpon>PlayerControl.xaml</DependentUpon>
+    <Compile Include="Control\PlayControl.xaml.cs">
+      <DependentUpon>PlayControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\VideoControl.xaml.cs">
+      <DependentUpon>VideoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="DBHelper.cs" />
+    <Compile Include="Model\Comment.cs" />
+    <Compile Include="Model\Profile.cs" />
     <Compile Include="Model\Video.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
+    <Compile Include="ViewModel\PlayViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -168,9 +180,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converter\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resource\ic_person.png" />
   </ItemGroup>

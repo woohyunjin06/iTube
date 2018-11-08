@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\현진\source\repos\iTube\iTube\App.xaml
-51495981009
+6920836661
 
-161347879067
+22-1373876063
 19755112028
-Control\ListControl.xaml;Control\LoginControl.xaml;Control\MainControl.xaml;Control\PlayerControl.xaml;View\MainWindow.xaml;
+Control\ListControl.xaml;Control\LoginControl.xaml;Control\MainControl.xaml;Control\PlayControl.xaml;Control\VideoControl.xaml;View\MainWindow.xaml;
 
-False
+True
 

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace iTube.Control
 {
     /// <summary>
-    /// Interaction logic for PlayerControl.xaml
+    /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class PlayerControl : UserControl
+    public partial class UserControl1 : UserControl
     {
-        public PlayerControl()
+        public UserControl1()
         {
             InitializeComponent();
         }

@@ -33,39 +33,21 @@ namespace iTube.Model
             set
             {
                 thumbnail = value;
-                NotifyPropertyChanged("Thumbnail");
+                NotifyPropertyChanged(nameof(Thumbnail));
             }
         }
 
-        private int channelIndex;
-        public int ChannelIndex
+        private Profile channelProfile;
+        public Profile ChannelProfile
         {
-            get => channelIndex;
+            get => channelProfile;
             set
             {
-                channelIndex = value;
+                channelProfile = value;
+                NotifyPropertyChanged(nameof(ChannelProfile));
             }
         }
-        private BitmapImage channelArt;
-        public BitmapImage ChannelArt
-        {
-            get => channelArt;
-            set
-            {
-                channelArt = value;
-                NotifyPropertyChanged("ChannelArt");
-            }
-        }
-        private string channelName;
-        public string ChannelName
-        {
-            get => channelName;
-            set
-            {
-                channelName = value;
-                NotifyPropertyChanged("ChannelName");
-            }
-        }
+
         private string title;
         public string Title
         {
@@ -73,7 +55,16 @@ namespace iTube.Model
             set
             {
                 title = value;
-                NotifyPropertyChanged("Title");
+                NotifyPropertyChanged(nameof(Title));
+            }
+        }
+        private string videoLink;
+        public string VideoLink
+        {
+            get => videoLink;
+            set
+            {
+                videoLink = value;
             }
         }
         private int views;
@@ -83,7 +74,7 @@ namespace iTube.Model
             set
             {
                 views = value;
-                NotifyPropertyChanged("Views");
+                NotifyPropertyChanged(nameof(Views));
             }
         }
         private DateTime date;
@@ -93,7 +84,7 @@ namespace iTube.Model
             set
             {
                 date = value;
-                NotifyPropertyChanged("Date");
+                NotifyPropertyChanged(nameof(Date));
             }
         }
     }

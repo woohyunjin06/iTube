@@ -21,7 +21,7 @@
                             <Ellipse Width="30" Height="30" Grid.Column="0" Fill="#FFBBBBBB" Margin="5 -15 0 0"/>
                             <Ellipse Width="30" Height="30" Grid.Column="0" Margin="5 -15 0 0" >
                                 <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding ChannelArt, IsAsync=True}"  />
+                                    <ImageBrush ImageSource="{Binding ChannelProfile.ChannelArt, IsAsync=True}"  />
                                 </Ellipse.Fill>
                             </Ellipse>
                             
@@ -30,7 +30,7 @@
                                         <TextBlock TextWrapping="Wrap" Text="{Binding Title}"/>
                                 </Label>
                                 <StackPanel Orientation="Horizontal" Margin="0, -5, 0, -10">
-                                    <Label Content="{Binding ChannelName}" FontSize="11" Foreground="Gray" />
+                                    <Label Content="{Binding ChannelProfile.ChannelName}" FontSize="11" Foreground="Gray" />
                                     <Label Content="{Binding Views}" ContentStringFormat="조회수 {0}회" FontSize="11" Foreground="Gray"/>
                                 </StackPanel>
                                 <Label Content="{Binding Date}"  ContentStringFormat="yyyy. MM. dd" FontSize="11" Foreground="Gray" />

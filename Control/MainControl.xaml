@@ -10,7 +10,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <dragablz:TabablzControl>
+        <dragablz:TabablzControl x:Name="tabControl">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController/>
             </dragablz:TabablzControl.InterTabController>
@@ -18,13 +18,13 @@
                 <TabItem.Header>
                     <materialDesign:PackIcon Kind="Home" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                 </TabItem.Header>
-                <control:ListControl/>
+                <control:ListControl PlayVideo="ListControl_PlayVideo"/>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <materialDesign:PackIcon Kind="Subscriptions" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                 </TabItem.Header>
-                <TextBlock Text="Amazing designs!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <!--<control:PlayControl/>-->
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -33,5 +33,6 @@
                 <TextBlock Text="Ask for any question!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </TabItem>
         </dragablz:TabablzControl>
+        <local:PlayControl x:Name="playControl" Visibility="Collapsed"/>
     </Grid>
 </UserControl>
