@@ -180,7 +180,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resource\ic_person.png" />
   </ItemGroup>
