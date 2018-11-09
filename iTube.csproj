@@ -127,6 +127,7 @@
       <DependentUpon>VideoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converter\RateConverter.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="Model\Comment.cs" />
     <Compile Include="Model\Profile.cs" />
@@ -182,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resource\ic_person.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,6 +20,7 @@ namespace iTube
             {
                 Profile profile = new Profile()
                 {
+                    ChannelIndex = uid,
                     ChannelName = result[0].ToString(),
                     ChannelArt = CreateProfileImage(result[1].ToString())
                 };

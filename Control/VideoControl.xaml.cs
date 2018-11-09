@@ -38,13 +38,14 @@ namespace iTube.Control
 
         public void PlayVideo(string filename)
         {
-            
             mediaPlayer.Source = new Uri(App.SERVER_URI+"/video/"+filename);
             mediaPlayer.Play();
         }
 
         public void StopVideo()
         {
+            IsPlaying = false;
+            ControlButton();
             mediaPlayer.Source = null;
             mediaPlayer.Stop();
             mediaPlayer.Close();
@@ -77,13 +78,15 @@ namespace iTube.Control
             {
                 mediaPlayer.Play();  
             }
-            Play.Visibility = IsPlaying ? Visibility.Visible : Visibility.Collapsed;
-            Pause.Visibility = IsPlaying ? Visibility.Collapsed : Visibility.Visible;
             IsPlaying = !IsPlaying;
+            ControlButton();
         }
 
         private void mediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
         {
+            IsPlaying = true;
+            ControlButton();
+
             TimeSpan timeSpan = mediaPlayer.NaturalDuration.TimeSpan;
             Slider.Maximum = timeSpan.TotalSeconds;
             Slider.SmallChange = 1;
@@ -98,11 +101,10 @@ namespace iTube.Control
             TimeSpan timeSpan = new TimeSpan(0, 0, 0, (int)Slider.Value, 0);
             mediaPlayer.Position = timeSpan;
         }
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void ControlButton()
         {
-            //TimeSpan timeSpan = new TimeSpan(0, 0, 0, (int)Slider.Value, 0);
-            //mediaPlayer.Position = timeSpan;
+            Play.Visibility = IsPlaying ? Visibility.Collapsed : Visibility.Visible;
+            Pause.Visibility = IsPlaying ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

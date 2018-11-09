@@ -14,8 +14,11 @@ namespace iTube
     /// </summary>
     public partial class App : Application
     {
-        public static string SHORT_SERVER_URI = "10.80.161.143";
+        public static string SHORT_SERVER_URI = "localhost";
         public static string SERVER_URI = "http://" + SHORT_SERVER_URI + "/itube";
+
+        public static Boolean IS_LOGGED = false;
+        public static int USER_IDX = 1;
 
         public static ListViewModel listViewModel = null;
         public static PlayViewModel playViewModel = null;

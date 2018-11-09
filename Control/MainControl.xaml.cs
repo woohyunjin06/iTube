@@ -39,17 +39,32 @@ namespace iTube.Control
         private void ListControl_PlayVideo(Video video)
         {
             playControl.PlayVideo(video);
-            tabControl.Visibility = Visibility.Collapsed;
+            CollapseEntireControl();
             playControl.Visibility = Visibility.Visible;
+
             backVisibility(Visibility.Visible);
         }
 
         public void BackPressed()
         {
             playControl.BackPressed();
+            CollapseEntireControl();
             tabControl.Visibility = Visibility.Visible;
-            playControl.Visibility = Visibility.Collapsed;
+
             backVisibility(Visibility.Collapsed);
+        }
+
+        private void playControl_loginVisibilityHandler(Visibility v)
+        {
+            CollapseEntireControl();
+            loginControl.Visibility = v;
+        }
+
+        private void CollapseEntireControl()
+        {
+            tabControl.Visibility = Visibility.Collapsed;
+            playControl.Visibility = Visibility.Collapsed;
+            loginControl.Visibility = Visibility.Collapsed;
         }
     }
 }

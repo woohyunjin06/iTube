@@ -1,4 +1,5 @@
 ﻿using iTube.Model;
+using iTube.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,11 @@ namespace iTube.Control
     /// </summary>
     public partial class PlayControl : UserControl
     {
+        private PlayViewModel ViewModel = null;
+
+        public delegate void LoginVisibilityHandler(Visibility v);
+        public event LoginVisibilityHandler loginVisibilityHandler;
+
         public PlayControl()
         {
             InitializeComponent();
@@ -29,24 +35,79 @@ namespace iTube.Control
 
         private void PlayControl_Loaded(object sender, RoutedEventArgs e)
         {
-            this.DataContext = App.playViewModel;
+            this.ViewModel = App.playViewModel;
+            this.DataContext = this.ViewModel;
         }
 
         public void PlayVideo(Video video)
         {
             videoControl.PlayVideo(video.VideoLink);
-            App.playViewModel.CurrentVideo = video;
+            ViewModel.CurrentVideo = video;
         }
 
         public void BackPressed()
         {
             videoControl.StopVideo();
-            App.playViewModel.CurrentVideo = null;
+            ViewModel.CurrentVideo = null;
         }
 
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CommentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListView.SelectedItem = null;
+            if (CommentListView.SelectedItem != null)
+            {
+                Comment comment = (Comment)CommentListView.SelectedItem;
+                CommentListView.SelectedItem = null;
+
+                if(comment.ChannelProfile.ChannelIndex == App.USER_IDX)
+                {
+                    MessageBoxResult rsltMessageBox = MessageBox.Show("Are you sure to delete this comment?", "Delete comment", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    switch (rsltMessageBox)
+                    {
+                        case MessageBoxResult.Yes:
+                            ViewModel.DeleteComment(comment.Index);
+                            break;
+
+                        case MessageBoxResult.No:
+
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void commentBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Return && commentBox.Text.Trim() != string.Empty)
+            {
+                if (App.IS_LOGGED)
+                    ViewModel.PostComment(App.USER_IDX, commentBox.Text);
+                else
+                    ShowLoginDialog();
+                    
+                commentBox.Text = string.Empty;
+
+                Keyboard.ClearFocus();
+            }
+        }
+
+        private void ShowLoginDialog()
+        {
+            MessageBoxResult rsltMessageBox = MessageBox.Show("로그인이 필요한 기능입니다.\n로그인 하시겠습니까?", "로그인 필요", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            switch (rsltMessageBox)
+            {
+                case MessageBoxResult.Yes:
+                    loginVisibilityHandler(Visibility.Visible);
+                    break;
+            }
+        }
+
+        private void Rate_Click(object sender, RoutedEventArgs e)
+        {
+            Rate type = (Rate)Enum.Parse(typeof(Rate), ((Button)sender).Name);
+
+            ViewModel.RateVideo(type);
         }
     }
 }

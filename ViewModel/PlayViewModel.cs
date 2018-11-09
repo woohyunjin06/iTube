@@ -33,28 +33,7 @@ namespace iTube.ViewModel
             set
             {
                 currentVideo = value;
-
-                if (currentVideo != null)
-                {
-                    Title = currentVideo.Title;
-                    ChannelName = currentVideo.ChannelProfile.ChannelName;
-                    ChannelArt = currentVideo.ChannelProfile.ChannelArt;
-                    Date = currentVideo.Date;
-                    Views = currentVideo.Views;
-                    ChannelIndex = currentVideo.ChannelProfile.ChannelIndex;
-                    
-                    GetComment(currentVideo.Index);
-                }
-                else
-                {
-                    Title = null;
-                    ChannelName = null;
-                    ChannelArt = null;
-                    Date = DateTime.Now;
-                    Views = -1;
-                    ChannelIndex = -1;
-                }
-
+                SetVideoInfo();
             }
         }
         #region Variables
@@ -69,25 +48,14 @@ namespace iTube.ViewModel
             }
         }
 
-        private string channelName;
-        public string ChannelName
+        private Profile channelProfile;
+        public Profile ChannelProfile
         {
-            get => channelName;
+            get => channelProfile;
             set
             {
-                channelName = value;
-                NotifyPropertyChanged(nameof(ChannelName));
-            }
-        }
-
-        private BitmapImage channelArt;
-        public BitmapImage ChannelArt
-        {
-            get => channelArt;
-            set
-            {
-                channelArt = value;
-                NotifyPropertyChanged(nameof(ChannelArt));
+                channelProfile = value;
+                NotifyPropertyChanged(nameof(channelProfile));
             }
         }
 
@@ -113,6 +81,39 @@ namespace iTube.ViewModel
             }
         }
 
+        private Rate videoRate;
+        public Rate VideoRate
+        {
+            get => videoRate;
+            set
+            {
+                videoRate = value;
+                NotifyPropertyChanged(nameof(VideoRate));
+            }
+        }
+
+        private int likeCount;
+        public int LikeCount
+        {
+            get => likeCount;
+            set
+            {
+                likeCount = value;
+                NotifyPropertyChanged(nameof(LikeCount));
+            }
+        }
+
+        private int dislikeCount;
+        public int DislikeCount
+        {
+            get => dislikeCount;
+            set
+            {
+                dislikeCount = value;
+                NotifyPropertyChanged(nameof(DislikeCount));
+            }
+        }
+
         private int commentCount;
         public int CommentCount
         {
@@ -123,8 +124,14 @@ namespace iTube.ViewModel
                 NotifyPropertyChanged(nameof(CommentCount));
             }
         }
+        
 
         private int ChannelIndex
+        {
+            get;
+            set;
+        }
+        private int Index
         {
             get;
             set;
@@ -136,14 +143,49 @@ namespace iTube.ViewModel
             dbHelper = new DBHelper("itube", "itube", App.SHORT_SERVER_URI, "itube");
             CommentList = new ObservableCollection<Comment>();
         }
+        
+        private void SetVideoInfo()
+        {
+            if (CurrentVideo != null)
+            {
+                Index = CurrentVideo.Index;
+                Title = CurrentVideo.Title;
+                ChannelProfile = CurrentVideo.ChannelProfile;
+                Date = CurrentVideo.Date;
+                Views = CurrentVideo.Views;
+                ChannelIndex = CurrentVideo.ChannelProfile.ChannelIndex;
 
-        private void GetComment(int vid)
+                dbHelper.OpenConnection();
+                GetComment();
+                GetRate();
+                AddViewCount();
+                dbHelper.CloseConnection();
+            }
+            else
+            {
+                Index = -1;
+                Title = null;
+                ChannelProfile = null;
+                Date = DateTime.Now;
+                Views = -1;
+                ChannelIndex = -1;
+            }
+        }
+
+        private void AddViewCount()
+        {
+            dbHelper.ExecuteQuery("UPDATE video SET views = " + (Views + 1) + " WHERE idx = " + Index + ";");
+
+            this.Views++;
+            CurrentVideo.Views++;
+        }
+
+        private void GetComment()
         {
             CommentList.Clear();
             CommentCount = 0;
 
-            dbHelper.OpenConnection();
-            MySqlDataReader result = dbHelper.ExecuteReaderQuery("SELECT idx, uid, content, date FROM comment WHERE vid = "+vid+";");
+            MySqlDataReader result = dbHelper.ExecuteReaderQuery("SELECT idx, uid, content, date FROM comment WHERE vid = "+Index+";");
             
             while (result.Read())
             {
@@ -161,10 +203,119 @@ namespace iTube.ViewModel
             result.Close();
         }
 
+        public void PostComment(int uid, string content)
+        {
+            dbHelper.OpenConnection();
+            dbHelper.ExecuteQuery(String.Format("INSERT INTO comment(vid, uid, content) VALUES({0}, {1}, \"{2}\");",
+                Index, uid, content));
+            
+            GetComment();
+
+            dbHelper.CloseConnection();
+        }
+
+        public void DeleteComment(int cid)
+        {
+            dbHelper.OpenConnection();
+            dbHelper.ExecuteQuery("DELETE FROM comment WHERE idx = " + cid + ";");
+            
+            GetComment();
+
+            dbHelper.CloseConnection();
+        }
+
+        private void GetRate()
+        {
+            LikeCount = 0;
+            DislikeCount = 0;
+            VideoRate = Rate.NONE;
+
+            MySqlDataReader result = dbHelper.ExecuteReaderQuery("SELECT uid, score FROM rate WHERE vid = "+Index+";");
+            while (result.Read())
+            {
+                Rate rate = (Rate)Convert.ToInt32(result[1].ToString());
+                int uid = Convert.ToInt32(result[0].ToString());
+                if (uid == App.USER_IDX)
+                {
+                    VideoRate = rate;
+                }
+
+                switch (rate)
+                {
+                    case Rate.LIKE:
+                        LikeCount++;
+                        break;
+                    case Rate.DISLIKE:
+                        DislikeCount++;
+                        break;
+                }
+            }
+            result.Close();
+            
+        }
+
+        public void RateVideo(Rate rate)
+        {
+            dbHelper.OpenConnection();
+            if(VideoRate == rate) // 좋아요or싫어요 삭제
+            {
+                ControlCount(rate, true);
+                dbHelper.ExecuteQuery(String.Format("DELETE FROM rate WHERE uid = '{0}' AND vid = '{1}';", App.USER_IDX, Index));
+
+                VideoRate = Rate.NONE;
+            }
+            else
+            {
+                ControlCount(rate, false);
+                dbHelper.ExecuteQuery(String.Format("DELETE FROM rate WHERE uid = '{0}' AND vid = '{1}';", App.USER_IDX, Index));
+                dbHelper.ExecuteQuery(String.Format("INSERT INTO rate(uid, vid, score) VALUES({0},{1},{2});", App.USER_IDX, Index, (int)rate));
+
+                VideoRate = rate;
+            }
+            dbHelper.CloseConnection();
+        }
+
+        private void ControlCount(Rate rate, Boolean isRemove)
+        {
+            if (isRemove)
+            {
+                if (VideoRate == Rate.LIKE)
+                    LikeCount--;
+                else if (VideoRate == Rate.DISLIKE)
+                    DislikeCount--;
+            }
+            else
+            {
+                if (VideoRate == Rate.LIKE)
+                {
+                    LikeCount--;
+                    DislikeCount++;
+                }
+                else if (VideoRate == Rate.DISLIKE)
+                {
+                    DislikeCount--;
+                    LikeCount++;
+                }
+                else // NONE일때
+                {
+                    if (rate == Rate.LIKE)
+                        LikeCount++;
+                    else
+                        DislikeCount++;
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+    public enum Rate
+    {
+        LIKE = 1,
+        NONE = 0,
+        DISLIKE = -1
     }
 }

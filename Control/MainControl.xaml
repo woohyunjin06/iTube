@@ -24,7 +24,7 @@
                 <TabItem.Header>
                     <materialDesign:PackIcon Kind="Subscriptions" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                 </TabItem.Header>
-                <!--<control:PlayControl/>-->
+                
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -33,6 +33,7 @@
                 <TextBlock Text="Ask for any question!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </TabItem>
         </dragablz:TabablzControl>
-        <local:PlayControl x:Name="playControl" Visibility="Collapsed"/>
+        <local:PlayControl x:Name="playControl" Visibility="Collapsed" loginVisibilityHandler="playControl_loginVisibilityHandler"/>
+        <local:LoginControl x:Name="loginControl" Visibility="Collapsed" Panel.ZIndex="1"/>
     </Grid>
 </UserControl>

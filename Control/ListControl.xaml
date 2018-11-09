@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListView x:Name="ListView" ItemsSource="{Binding VideoList}" SelectionChanged="ListView_SelectionChanged" >
+        <ListView x:Name="ListView" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding VideoList}" SelectionChanged="ListView_SelectionChanged" >
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>
